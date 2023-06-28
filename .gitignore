@@ -1,0 +1,8 @@
+node_modules
+# git ignore for yarn.lock
+package-lock.json
+yarn-error.log
+
+# testing
+/coverage
+coverage.xml
