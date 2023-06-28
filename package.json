@@ -1,0 +1,44 @@
+{
+  "name": "2023-1-measuresoftgram-helper-action",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts --source-map --license licenses.txt --out dist",
+    "lint": "eslint src/ --ext .ts",
+    "test": "jest __tests__/ --watch --coverage --verbose --onlyChanged --passWithNoTests",
+    "ci:test": "jest --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fga-eps-mds/2023-1-MeasureSoftGram-Helper-Action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fga-eps-mds/2023-1-MeasureSoftGram-Helper-Action/issues"
+  },
+  "homepage": "https://github.com/fga-eps-mds/2023-1-MeasureSoftGram-Helper-Action#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^5.1.1",
+    "axios": "^1.4.0",
+    "fs-extra": "^11.1.1",
+    "jest-sonar": "^0.2.16",
+    "mock-fs": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.2",
+    "@types/mock-fs": "^4.13.1",
+    "@types/node": "^20.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "eslint": "^8.42.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
