@@ -24208,7 +24208,8 @@ async function run() {
                 throw err;
             console.log('Data written to file.');
         });
-        uploadToRepo(octokit, './pipeline', repo.owner, repo.repo, 'main');
+        const metricsRepo = core.getInput('metricsRepo');
+        uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
     }
     catch (error) {
         if (error instanceof Error) {
@@ -24221,7 +24222,6 @@ async function run() {
 }
 exports.run = run;
 const uploadToRepo = async (octo, coursePath, org, repo, branch) => {
-    // gets commit's AND its tree's SHA
     const currentCommit = await getCurrentCommit(octo, org, repo, branch);
     const filesPaths = await glob(coursePath);
     const filesBlobs = await Promise.all(filesPaths.map(createBlobForFile(octo, org, repo)));
@@ -24327,7 +24327,6 @@ class Sonarqube {
         this.token = info.token;
         this.project = info.project;
         const tokenb64 = Buffer.from(`${this.token}:`).toString('base64');
-        this.project.sonarProjectKey = "fga-eps-mds_2023-1-MeasureSoftGram-Front";
         console.log(`SonarQube host: ${this.host}`);
         console.log(`SonarQube project: ${this.project.sonarProjectKey}`);
         this.http = axios_1.default.create({
