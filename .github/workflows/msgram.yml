@@ -2,7 +2,7 @@ name: msgra-helper-action
 on:
   pull_request:
     branches:
-      - test2
+      - feat/add-action
     types: [ closed ]
   push:
     tags:
