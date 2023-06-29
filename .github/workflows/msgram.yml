@@ -24,3 +24,4 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           metricsRepo: "2023-1-MeasureSoftGram-doc"
+          token: ${{ secrets.SONAR_TOKEN }}
