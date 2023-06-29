@@ -19,9 +19,11 @@ export async function run() {
     const octokit = github.getOctokit(
       core.getInput('githubToken', { required: true })
     );
+    const { pull_request } = github.context.payload;
 
     const metrics = await sonarqube.getMeasures({
       pageSize: 500,
+      pullRequestNumber: pull_request?.number ?? null,
     })
 
     const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({

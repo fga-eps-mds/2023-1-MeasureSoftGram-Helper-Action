@@ -21365,8 +21365,10 @@ async function run() {
         const sonarqube = new sonarqube_1.default(info);
         const currentDate = new Date();
         const octokit = github.getOctokit(core.getInput('githubToken', { required: true }));
+        const { pull_request } = github.context.payload;
         const metrics = await sonarqube.getMeasures({
             pageSize: 500,
+            pullRequestNumber: pull_request?.number ?? null,
         });
         const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
             owner: repo.owner,
@@ -21518,10 +21520,8 @@ class Sonarqube {
         this.token = info.token;
         this.project = info.project;
         const tokenb64 = Buffer.from(`${this.token}:`).toString('base64');
-        this.project.sonarProjectKey = "fga-eps-mds_2023-1-MeasureSoftGram-Front";
         console.log(`SonarQube host: ${this.host}`);
         console.log(`SonarQube project: ${this.project.sonarProjectKey}`);
-        console.log(`SonarQube token: ${this.token}`);
         this.http = axios_1.default.create({
             baseURL: this.host,
             timeout: 10000,
@@ -21530,9 +21530,14 @@ class Sonarqube {
             }
         });
     }
-    getMeasures = async ({ pageSize }) => {
+    getMeasures = async ({ pageSize, pullRequestNumber }) => {
         try {
-            const response = await this.http.get(`/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
+            let sonar_url = `/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`;
+            if (pullRequestNumber) {
+                sonar_url += `&pullRequest=${pullRequestNumber}`;
+            }
+            console.log(`SonarQube URL: ${sonar_url}`);
+            const response = await this.http.get(sonar_url);
             if (response.status !== 200 || !response.data) {
                 throw new Error('Error getting project measures from SonarQube. Please make sure you provided the host and token inputs.');
             }
