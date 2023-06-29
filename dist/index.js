@@ -21521,6 +21521,7 @@ class Sonarqube {
         this.project.sonarProjectKey = "fga-eps-mds_2023-1-MeasureSoftGram-Front";
         console.log(`SonarQube host: ${this.host}`);
         console.log(`SonarQube project: ${this.project.sonarProjectKey}`);
+        console.log(`SonarQube token: ${this.token}`);
         this.http = axios_1.default.create({
             baseURL: this.host,
             timeout: 10000,

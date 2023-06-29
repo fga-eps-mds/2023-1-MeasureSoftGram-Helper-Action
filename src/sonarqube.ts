@@ -59,6 +59,7 @@ export default class Sonarqube {
 
     console.log(`SonarQube host: ${this.host}`)
     console.log(`SonarQube project: ${this.project.sonarProjectKey}`)
+    console.log(`SonarQube token: ${this.token}`)
 
     this.http = axios.create({
         baseURL: this.host,
