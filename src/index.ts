@@ -33,7 +33,6 @@ export async function run() {
     const branchName = github.context.ref.split('/').slice(-1)[0];
 
     console.log("branchName: ", branchName);
-    console.log("tagName: ", tagName);
 
     if (github.context.payload.pull_request) {
       if (!github.context.payload.pull_request.merged) return;
