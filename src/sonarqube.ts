@@ -58,7 +58,7 @@ export default class Sonarqube {
     console.log(`SonarQube host: ${this.host}`)
     console.log(`SonarQube project: ${this.project.sonarProjectKey}`)
       // print url 
-      console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`)
+      console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${500}`)
 
 
     this.http = axios.create({
