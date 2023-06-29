@@ -21519,6 +21519,22 @@ class Sonarqube {
         this.project = info.project;
         console.log(`SonarQube host: ${this.host}`);
         console.log(`SonarQube project: ${this.project.sonarProjectKey}`);
+        // print url 
+        console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${500}`);
+        // send a get request to this url
+        fetch(`${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${500}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            console.log("response: ", response);
+            return response.json();
+        }).then((data) => {
+            console.log("data: ", data);
+        }).catch((error) => {
+            console.log("error: ", error);
+        });
         this.http = axios_1.default.create({
             baseURL: this.host,
             timeout: 10000,
@@ -21526,8 +21542,6 @@ class Sonarqube {
     }
     getMeasures = async ({ pageSize }) => {
         try {
-            // print url 
-            console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
             const response = await this.http.get(`/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
             if (response.status !== 200 || !response.data) {
                 throw new Error('Error getting project measures from SonarQube. Please make sure you provided the host and token inputs.');
