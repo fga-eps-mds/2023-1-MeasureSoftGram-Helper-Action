@@ -62,9 +62,6 @@ export default class Sonarqube {
     this.http = axios.create({
         baseURL: this.host,
         timeout: 10000,
-        headers: {
-          Authorization: this.token ? `Basic ${tokenb64}` : "",
-        }
     })
   }
 

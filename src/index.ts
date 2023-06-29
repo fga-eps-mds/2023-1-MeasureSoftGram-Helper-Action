@@ -3,7 +3,7 @@ import * as github from '@actions/github';
 import glob from 'globby';
 import path from 'path';
 import fs from 'fs';
-import readFile from 'fs-extra';
+import { readFile } from 'fs/promises'
 
 import { createFolder, generateFilePath, getInfo, getNewTagName, Info, shouldCreateRelease } from './utils';
 import Sonarqube from './sonarqube'
@@ -119,10 +119,8 @@ const getCurrentCommit = async (octo: any, org: string, repo: string, branch: st
   }
 }
 
-const getFileAsUTF8 = (filePath: string) => readFile(filePath, 'utf8')
-
 const createBlobForFile = (octo: any, org: string, repo: string) => async (filePath: string) => {
-  const content = await getFileAsUTF8(filePath)
+  const content = await readFile(filePath, 'utf8')
   const blobData = await octo.rest.git.createBlob({
     owner: org,
     repo,
