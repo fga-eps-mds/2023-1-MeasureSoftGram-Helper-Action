@@ -21517,7 +21517,6 @@ class Sonarqube {
         this.host = info.host || 'https://sonarcloud.io';
         this.token = info.token;
         this.project = info.project;
-        const tokenb64 = Buffer.from(`${this.token}:`).toString('base64');
         console.log(`SonarQube host: ${this.host}`);
         console.log(`SonarQube project: ${this.project.sonarProjectKey}`);
         this.http = axios_1.default.create({
@@ -21527,6 +21526,8 @@ class Sonarqube {
     }
     getMeasures = async ({ pageSize }) => {
         try {
+            // print url 
+            console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
             const response = await this.http.get(`/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
             if (response.status !== 200 || !response.data) {
                 throw new Error('Error getting project measures from SonarQube. Please make sure you provided the host and token inputs.');

@@ -57,6 +57,9 @@ export default class Sonarqube {
 
     console.log(`SonarQube host: ${this.host}`)
     console.log(`SonarQube project: ${this.project.sonarProjectKey}`)
+      // print url 
+      console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`)
+
 
     this.http = axios.create({
         baseURL: this.host,
@@ -70,8 +73,6 @@ export default class Sonarqube {
       pageSize: number
     }): Promise<MeasuresResponseAPI> => {
     try {
-      // print url 
-      console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`)
 
       const response = await this.http.get<MeasuresResponseAPI>(
         `/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`
