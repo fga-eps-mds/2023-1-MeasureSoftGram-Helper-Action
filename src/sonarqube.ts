@@ -54,34 +54,18 @@ export default class Sonarqube {
     this.host = info.host || 'https://sonarcloud.io'
     this.token = info.token
     this.project = info.project
+    const tokenb64 = Buffer.from(`${this.token}:`).toString('base64')
+    this.project.sonarProjectKey = "fga-eps-mds_2023-1-MeasureSoftGram-Front"
 
     console.log(`SonarQube host: ${this.host}`)
     console.log(`SonarQube project: ${this.project.sonarProjectKey}`)
-      // print url 
-      console.log(`SonarQube url: ${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${500}`)
-      // send a get request to this url
-      
-      fetch(
-        `${this.host}/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${500}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      ).then((response) => {
-        console.log("response: ", response);
-        return response.json();
-      }).then((data) => {
-        console.log("data: ", data);
-      }).catch((error) => {
-        console.log("error: ", error);
-      });
-
 
     this.http = axios.create({
         baseURL: this.host,
         timeout: 10000,
+        headers: {
+          Authorization: this.token ? `Basic ${tokenb64}` : "",
+        }
     })
   }
 
@@ -91,7 +75,6 @@ export default class Sonarqube {
       pageSize: number
     }): Promise<MeasuresResponseAPI> => {
     try {
-
       const response = await this.http.get<MeasuresResponseAPI>(
         `/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`
       )
