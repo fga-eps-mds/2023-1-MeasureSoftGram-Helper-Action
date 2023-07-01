@@ -21377,14 +21377,10 @@ async function run() {
             console.log("There are no releases yet.");
         }
         else {
-            const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
-                owner: repo.owner,
-                repo: repo.repo,
-            });
-            latestReleaseTagName = latestRelease.tag_name;
+            latestReleaseTagName = releases.data?.[0]?.tag_name;
         }
         let newTagName = null;
-        let branchName = github.context.ref.split('/').slice(-1)[0];
+        const branchName = github.context.ref.split('/').slice(-1)[0];
         console.log("branchName: ", branchName);
         console.log("latestReleaseTagName: ", latestReleaseTagName);
         if (github.context.payload.pull_request) {
@@ -21632,7 +21628,6 @@ function getNewTagName(labels, latestTag) {
     }
 }
 exports.getNewTagName = getNewTagName;
-;
 function shouldCreateRelease(labels) {
     return labels.includes('MINOR_RELEASE') || labels.includes('MAJOR_RELEASE') || labels.includes('PATCH_RELEASE');
 }

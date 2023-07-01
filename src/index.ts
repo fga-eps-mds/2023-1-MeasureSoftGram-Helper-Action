@@ -33,12 +33,7 @@ export async function run() {
     if (releases.data.length === 0) {
       console.log("There are no releases yet.")
     } else {
-      const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
-        owner: repo.owner,
-        repo: repo.repo,
-      });
-
-      latestReleaseTagName = latestRelease.tag_name;
+      latestReleaseTagName = releases.data?.[0]?.tag_name;
     }
 
     let newTagName = null;
