@@ -22,7 +22,9 @@ export async function run() {
 
     const metrics = await sonarqube.getMeasures({
       pageSize: 500,
-    })
+    });
+
+    console.log("metrics: ", metrics);
 
     const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
       owner: repo.owner,

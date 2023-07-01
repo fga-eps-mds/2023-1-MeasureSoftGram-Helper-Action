@@ -24174,6 +24174,7 @@ async function run() {
         const metrics = await sonarqube.getMeasures({
             pageSize: 500,
         });
+        console.log("metrics: ", metrics);
         const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
             owner: repo.owner,
             repo: repo.repo,
@@ -24341,7 +24342,6 @@ class Sonarqube {
     getMeasures = async ({ pageSize }) => {
         try {
             const response = await this.http.get(`/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
-            console.log("here2: ", response);
             if (response.status !== 200 || !response.data) {
                 throw new Error('Error getting project measures from SonarQube. Please make sure you provided the host and token inputs.');
             }
