@@ -1,0 +1,23 @@
+name: helper-action
+on:
+  pull_request:
+    branches:
+      - main
+    types: [ closed ]
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  msgram_job:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Rodar a action de helper
+        uses: ./ # Uses an action in the root directory
+        id: msgram
+        with:
+          githubToken: ${{ secrets.API_TOKEN_DOC }}
+          metricsRepo: "2023-1-MeasureSoftGram-doc"
