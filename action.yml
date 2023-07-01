@@ -1,5 +1,5 @@
-name: 'Action Helper'
-description: 'Helper action'
+name: 'Msgram Helper Action'
+description: 'Collect metrics and help to create releases'
 inputs:
   host:
     description: "SonarQube Server URL"
