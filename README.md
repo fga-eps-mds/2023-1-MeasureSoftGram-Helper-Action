@@ -56,5 +56,5 @@ Exemplo:
 
 | Nome | Descrição | Obrigatório | Padrão |
 | --- | --- | --- | --- |
-| `metricsRepo` | Repositório onde as métricas serão armazenadas | Sim | N/A |
+| `metricsRepo` | Repositório onde as métricas serão armazenadas | Sim | String |
 | `githubToken` | Token de autenticação do github | Sim | N/A |
