@@ -5,6 +5,8 @@ on:
       - feat/add-action
     types: [ closed ]
   push:
+    branches:
+      - test
     tags:
       - "v*"
 
