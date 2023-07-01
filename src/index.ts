@@ -1,9 +1,9 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-const glob = require('globby')
-const path = require('path')
+import glob from 'globby';
+import path from 'path';
 import fs from 'fs';
-const { readFile } = require('fs-extra')
+import { readFile } from 'fs/promises'
 
 import { createFolder, generateFilePath, getInfo, getNewTagName, Info, shouldCreateRelease } from './utils';
 import Sonarqube from './sonarqube'
@@ -42,7 +42,7 @@ export async function run() {
     }
 
     let newTagName = null;
-    let branchName = github.context.ref.split('/').slice(-1)[0];
+    const branchName = github.context.ref.split('/').slice(-1)[0];
 
     console.log("branchName: ", branchName);
     console.log("latestReleaseTagName: ", latestReleaseTagName);
