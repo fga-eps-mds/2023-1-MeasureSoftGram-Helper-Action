@@ -24179,6 +24179,7 @@ async function run() {
             owner: repo.owner,
             repo: repo.repo,
         });
+        console.log("latestRelease: ", latestRelease);
         let tagName = latestRelease.tag_name;
         let newTagName = null;
         let branchName = github.context.ref.split('/').slice(-1)[0];
