@@ -91,9 +91,13 @@ export async function run() {
 const uploadToRepo = async (octo: any, coursePath: string, org: string, repo: string, branch: string) => {
   // gets commit's AND its tree's SHA
   const currentCommit = await getCurrentCommit(octo, org, repo, branch)
+  console.log('currentCommit', currentCommit)
   const filesPaths = await glob(coursePath)
+  console.log('filesPaths', filesPaths)
   const filesBlobs = await Promise.all(filesPaths.map(createBlobForFile(octo, org, repo)))
+  console.log('filesBlobs', filesBlobs)
   const pathsForBlobs = filesPaths.map(( fullPath: string ) => path.relative(coursePath, fullPath))
+  console.log('pathsForBlobs', pathsForBlobs)
   const newTree = await createNewTree(
       octo,
       org,
@@ -102,6 +106,7 @@ const uploadToRepo = async (octo: any, coursePath: string, org: string, repo: st
       pathsForBlobs,
       currentCommit.treeSha
   )
+  console.log('newTree', newTree)
   const newCommit = await createNewCommit(
       octo,
       org,
@@ -110,6 +115,7 @@ const uploadToRepo = async (octo: any, coursePath: string, org: string, repo: st
       newTree.sha,
       currentCommit.commitSha
   )
+  console.log('newCommit', newCommit)
   await setBranchToCommit(octo, org, repo, branch, newCommit.sha)
 }
 
