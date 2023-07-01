@@ -77,8 +77,8 @@ export async function run() {
       console.log('Data written to file.');
     });
 
-    // const metricsRepo = core.getInput('metricsRepo')
-    // uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
+    const metricsRepo = core.getInput('metricsRepo')
+    uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
   } catch (error: unknown) {
     if (error instanceof Error) {
       core.setFailed(error.message);
