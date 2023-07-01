@@ -47,7 +47,7 @@ export function getNewTagName(labels: string[], latestTag: string): string {
     else {
         return `v${major}.${minor}.${parseInt(patch) + 1}`;
     }
-};
+}
 
 export function shouldCreateRelease(labels: string[]) {
     return labels.includes('MINOR_RELEASE') || labels.includes('MAJOR_RELEASE') || labels.includes('PATCH_RELEASE');
