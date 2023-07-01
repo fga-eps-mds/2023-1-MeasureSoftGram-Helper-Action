@@ -24175,11 +24175,14 @@ async function run() {
             pageSize: 500,
         });
         console.log("metrics: ", metrics);
-        const releases = octokit.rest.repos.listReleases({
+        const releases = await octokit.rest.repos.listReleases({
             owner: repo.owner,
             repo: repo.repo,
         });
         console.log("releases: ", releases);
+        if (releases.data.length === 0) {
+            console.log("There are no releases yet.");
+        }
         const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
             owner: repo.owner,
             repo: repo.repo,
