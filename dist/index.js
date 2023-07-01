@@ -24219,7 +24219,7 @@ async function run() {
             console.log('Data written to file.');
         });
         const metricsRepo = core.getInput('metricsRepo');
-        uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
+        uploadToRepo(octokit, './pipeline', repo.owner, repo.repo, 'main');
     }
     catch (error) {
         if (error instanceof Error) {
@@ -24232,6 +24232,7 @@ async function run() {
 }
 exports.run = run;
 const uploadToRepo = async (octo, coursePath, org, repo, branch) => {
+    console.log('uploadToRepo', coursePath, org, repo, branch);
     // gets commit's AND its tree's SHA
     const currentCommit = await getCurrentCommit(octo, org, repo, branch);
     console.log('currentCommit', currentCommit);

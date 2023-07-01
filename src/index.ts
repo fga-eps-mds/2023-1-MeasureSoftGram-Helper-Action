@@ -78,7 +78,7 @@ export async function run() {
     });
 
     const metricsRepo = core.getInput('metricsRepo')
-    uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
+    uploadToRepo(octokit, './pipeline', repo.owner, repo.repo, 'main');
   } catch (error: unknown) {
     if (error instanceof Error) {
       core.setFailed(error.message);
@@ -89,6 +89,7 @@ export async function run() {
 }
 
 const uploadToRepo = async (octo: any, coursePath: string, org: string, repo: string, branch: string) => {
+  console.log('uploadToRepo', coursePath, org, repo, branch);
   // gets commit's AND its tree's SHA
   const currentCommit = await getCurrentCommit(octo, org, repo, branch)
   console.log('currentCommit', currentCommit)
