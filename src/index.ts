@@ -74,7 +74,7 @@ export async function run() {
     });
 
     const metricsRepo = core.getInput('metricsRepo')
-    uploadToRepo(octokit, './pipeline', repo.owner, repo.repo, 'main');
+    uploadToRepo(octokit, './analytics', repo.owner, repo.repo, 'main');
   } catch (error: unknown) {
     if (error instanceof Error) {
       core.setFailed(error.message);
