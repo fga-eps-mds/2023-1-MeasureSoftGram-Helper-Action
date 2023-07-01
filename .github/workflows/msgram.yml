@@ -2,7 +2,7 @@ name: helper-action
 on:
   pull_request:
     branches:
-      - main
+      - feat/add-action
     types: [ closed ]
   push:
     tags:
