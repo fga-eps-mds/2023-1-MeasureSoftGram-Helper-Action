@@ -5,6 +5,8 @@ on:
       - feat/add-action
     types: [ closed ]
   push:
+    branches:
+      - test
     tags:
       - "v*"
 
@@ -21,3 +23,4 @@ jobs:
         id: msgram
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          metricsRepo: "2023-1-MeasureSoftGram-doc"
