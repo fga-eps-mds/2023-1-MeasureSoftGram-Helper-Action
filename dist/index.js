@@ -21399,12 +21399,10 @@ async function run() {
             }
         }
         const file_release_name = newTagName ? newTagName : branchName;
-        const file_path = (0, utils_1.generateFilePath)(currentDate, repo.repo, file_release_name);
-        fs_1.default.writeFile(file_path, JSON.stringify(metrics), (err) => {
-            if (err)
-                throw err;
-            console.log('Data written to file.');
-        });
+        const file_name = (0, utils_1.generateFileName)(currentDate, repo.repo, file_release_name);
+        const file_path = './analytics/analytics-raw-data';
+        fs_1.default.mkdirSync(file_path, { recursive: true });
+        fs_1.default.writeFileSync(path_1.default.join(file_path, file_name), JSON.stringify(metrics));
         const metricsRepo = core.getInput('metricsRepo');
         uploadToRepo(octokit, './analytics', repo.owner, metricsRepo, 'main');
     }
@@ -21587,7 +21585,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.shouldCreateRelease = exports.getNewTagName = exports.generateFilePath = exports.createFolder = exports.getInfo = void 0;
+exports.shouldCreateRelease = exports.getNewTagName = exports.generateFileName = exports.createFolder = exports.getInfo = void 0;
 const core = __importStar(__nccwpck_require__(8834));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 function getInfo(repo) {
@@ -21609,12 +21607,12 @@ function createFolder(folderPath) {
     });
 }
 exports.createFolder = createFolder;
-function generateFilePath(currentDate, repo, file_release_name) {
+function generateFileName(currentDate, repo, file_release_name) {
     const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear().toString().padStart(4, '0')}-${currentDate.getHours().toString().padStart(2, '0')}-${currentDate.getMinutes().toString().padStart(2, '0')}`;
-    const file_path = `./analytics/analytics-raw-data/fga-eps-mds-${repo}-${formattedDate}-${file_release_name}.json`;
+    const file_path = `fga-eps-mds-${repo}-${formattedDate}-${file_release_name}.json`;
     return file_path;
 }
-exports.generateFilePath = generateFilePath;
+exports.generateFileName = generateFileName;
 function getNewTagName(labels, latestTag) {
     const [major, minor, patch] = latestTag.slice(1).split('.');
     if (labels.includes('MAJOR_RELEASE')) {

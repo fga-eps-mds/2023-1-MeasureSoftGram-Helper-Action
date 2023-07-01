@@ -3,9 +3,9 @@ import * as github from '@actions/github';
 import glob from 'globby';
 import path from 'path';
 import fs from 'fs';
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 
-import { createFolder, generateFilePath, getInfo, getNewTagName, Info, shouldCreateRelease } from './utils';
+import { createFolder, generateFileName, getInfo, getNewTagName, Info, shouldCreateRelease } from './utils';
 import Sonarqube from './sonarqube'
 
 const COMMIT_MESSAGE = process.env.COMMIT_MESSAGE || 'Auto generated'
@@ -61,12 +61,11 @@ export async function run() {
     }
 
     const file_release_name = newTagName ? newTagName : branchName;
-    const file_path = generateFilePath(currentDate, repo.repo, file_release_name);
+    const file_name = generateFileName(currentDate, repo.repo, file_release_name);
+    const file_path = './analytics/analytics-raw-data'
 
-    fs.writeFile(file_path, JSON.stringify(metrics), (err) => {
-      if (err) throw err;
-      console.log('Data written to file.');
-    });
+    fs.mkdirSync(file_path, { recursive: true })
+    fs.writeFileSync(path.join(file_path,file_name), JSON.stringify(metrics))
 
     const metricsRepo = core.getInput('metricsRepo')
     uploadToRepo(octokit, './analytics', repo.owner, metricsRepo, 'main');
