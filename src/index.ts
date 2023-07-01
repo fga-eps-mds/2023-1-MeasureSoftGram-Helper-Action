@@ -68,6 +68,12 @@ export async function run() {
       console.log('Data written to file.');
     });
 
+    // read file contents
+    fs.readFile(file_path, 'utf-8', (err, data) => {
+      if (err) throw err;
+      console.log('File data:', data);
+    });
+
     const metricsRepo = core.getInput('metricsRepo')
     uploadToRepo(octokit, './analytics', repo.owner, metricsRepo, 'main');
   } catch (error: unknown) {

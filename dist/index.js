@@ -21405,6 +21405,12 @@ async function run() {
                 throw err;
             console.log('Data written to file.');
         });
+        // read file contents
+        fs_1.default.readFile(file_path, 'utf-8', (err, data) => {
+            if (err)
+                throw err;
+            console.log('File data:', data);
+        });
         const metricsRepo = core.getInput('metricsRepo');
         uploadToRepo(octokit, './analytics', repo.owner, metricsRepo, 'main');
     }
