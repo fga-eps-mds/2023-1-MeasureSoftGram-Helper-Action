@@ -13,8 +13,7 @@ on:
 jobs:
   msgram_job:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
