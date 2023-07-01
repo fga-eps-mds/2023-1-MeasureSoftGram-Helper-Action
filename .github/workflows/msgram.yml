@@ -2,11 +2,9 @@ name: helper-action
 on:
   pull_request:
     branches:
-      - feat/add-action
+      - main
     types: [ closed ]
   push:
-    branches:
-      - test
     tags:
       - "v*"
 
