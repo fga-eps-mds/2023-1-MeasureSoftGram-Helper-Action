@@ -1,5 +1,8 @@
 name: 'Msgram Helper Action'
 description: 'Collect metrics and help to create releases'
+branding:
+  icon: 'upload-cloud'
+  color: 'blue'
 inputs:
   host:
     description: "SonarQube Server URL"
