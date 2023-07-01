@@ -1,8 +1,8 @@
-name: msgra-helper-action
+name: helper-action
 on:
   pull_request:
     branches:
-      - feat/add-action
+      - main
     types: [ closed ]
   push:
     branches:
@@ -18,10 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Msgram helper action
+      - name: Rodar a action de helper
         uses: ./ # Uses an action in the root directory
         id: msgram
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          metricsRepo: "2023-1-MeasureSoftGram-doc"
-          token: ${{ secrets.SONAR_TOKEN }}

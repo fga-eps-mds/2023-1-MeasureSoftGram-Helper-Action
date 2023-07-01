@@ -58,7 +58,7 @@ describe('generateFilePath', () => {
     const repo = 'my-repo';
     const file_release_name = 'release-1.0.0';
 
-    const expectedFilePath = './pipeline/analytics-raw-data/fga-eps-mds-my-repo-28-06-2023-10-30-release-1.0.0.json';
+    const expectedFilePath = './analytics-raw-data/fga-eps-mds-my-repo-28-06-2023-10-30-release-1.0.0.json';
     const generatedFilePath = generateFilePath(currentDate, repo, file_release_name);
 
     expect(generatedFilePath).toBe(expectedFilePath);

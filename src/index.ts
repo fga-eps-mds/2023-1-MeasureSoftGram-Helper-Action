@@ -1,9 +1,9 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import glob from 'globby';
-import path from 'path';
+const glob = require('globby')
+const path = require('path')
 import fs from 'fs';
-import { readFile } from 'fs/promises'
+const { readFile } = require('fs-extra')
 
 import { createFolder, generateFilePath, getInfo, getNewTagName, Info, shouldCreateRelease } from './utils';
 import Sonarqube from './sonarqube'
@@ -13,17 +13,15 @@ const COMMIT_MESSAGE = process.env.COMMIT_MESSAGE || 'Auto generated'
 export async function run() {
   try {
     const { repo } = github.context
-    const info: Info = getInfo(repo)
+    const info:Info = getInfo(repo)
     const sonarqube = new Sonarqube(info)
     const currentDate = new Date();
     const octokit = github.getOctokit(
-      core.getInput('githubToken', { required: true })
+      core.getInput('githubToken', {required: true})
     );
-    const { pull_request } = github.context.payload;
 
     const metrics = await sonarqube.getMeasures({
       pageSize: 500,
-      pullRequestNumber: pull_request?.number ?? null,
     })
 
     const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
@@ -31,10 +29,12 @@ export async function run() {
       repo: repo.repo,
     });
 
+    let tagName = latestRelease.tag_name;
     let newTagName = null;
-    const branchName = github.context.ref.split('/').slice(-1)[0];
+    let branchName = github.context.ref.split('/').slice(-1)[0];
 
     console.log("branchName: ", branchName);
+    console.log("tagName: ", tagName);
 
     if (github.context.payload.pull_request) {
       if (!github.context.payload.pull_request.merged) return;
@@ -66,8 +66,7 @@ export async function run() {
       console.log('Data written to file.');
     });
 
-    const metricsRepo = core.getInput('metricsRepo')
-    uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
+    uploadToRepo(octokit, './pipeline', repo.owner, repo.repo, 'main');
 
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -79,25 +78,26 @@ export async function run() {
 }
 
 const uploadToRepo = async (octo: any, coursePath: string, org: string, repo: string, branch: string) => {
+  // gets commit's AND its tree's SHA
   const currentCommit = await getCurrentCommit(octo, org, repo, branch)
   const filesPaths = await glob(coursePath)
   const filesBlobs = await Promise.all(filesPaths.map(createBlobForFile(octo, org, repo)))
-  const pathsForBlobs = filesPaths.map((fullPath: string) => path.relative(coursePath, fullPath))
+  const pathsForBlobs = filesPaths.map(( fullPath: string ) => path.relative(coursePath, fullPath))
   const newTree = await createNewTree(
-    octo,
-    org,
-    repo,
-    filesBlobs,
-    pathsForBlobs,
-    currentCommit.treeSha
+      octo,
+      org,
+      repo,
+      filesBlobs,
+      pathsForBlobs,
+      currentCommit.treeSha
   )
   const newCommit = await createNewCommit(
-    octo,
-    org,
-    repo,
-    COMMIT_MESSAGE,
-    newTree.sha,
-    currentCommit.commitSha
+      octo,
+      org,
+      repo,
+      COMMIT_MESSAGE,
+      newTree.sha,
+      currentCommit.commitSha
   )
   await setBranchToCommit(octo, org, repo, branch, newCommit.sha)
 }
@@ -105,64 +105,66 @@ const uploadToRepo = async (octo: any, coursePath: string, org: string, repo: st
 
 const getCurrentCommit = async (octo: any, org: string, repo: string, branch: string) => {
   const { data: refData } = await octo.rest.git.getRef({
-    owner: org,
-    repo,
-    ref: `heads/${branch}`,
+      owner: org,
+      repo,
+      ref: `heads/${branch}`,
   })
   const commitSha = refData.object.sha
   const { data: commitData } = await octo.rest.git.getCommit({
-    owner: org,
-    repo,
-    commit_sha: commitSha,
+      owner: org,
+      repo,
+      commit_sha: commitSha,
   })
   return {
-    commitSha,
-    treeSha: commitData.tree.sha,
+      commitSha,
+      treeSha: commitData.tree.sha,
   }
 }
 
+const getFileAsUTF8 = (filePath: string) => readFile(filePath, 'utf8')
+
 const createBlobForFile = (octo: any, org: string, repo: string) => async (filePath: string) => {
-  const content = await readFile(filePath, 'utf8')
+  const content = await getFileAsUTF8(filePath)
   const blobData = await octo.rest.git.createBlob({
-    owner: org,
-    repo,
-    content,
-    encoding: 'utf-8',
+      owner: org,
+      repo,
+      content,
+      encoding: 'utf-8',
   })
   return blobData.data
 }
 
 const createNewTree = async (octo: any, owner: string, repo: string, blobs: any, paths: string[], parentTreeSha: string) => {
-  const tree = blobs.map(({ sha }: any, index: any) => ({
-    path: paths[index],
-    mode: `100644`,
-    type: `blob`,
-    sha,
+  const tree = blobs.map(({ sha } : any, index: any) => ({
+      path: paths[index],
+      mode: `100644`,
+      type: `blob`,
+      sha,
   }))
   const { data } = await octo.rest.git.createTree({
-    owner,
-    repo,
-    tree,
-    base_tree: parentTreeSha,
+      owner,
+      repo,
+      tree,
+      base_tree: parentTreeSha,
   })
   return data
 }
 
 const createNewCommit = async (octo: any, org: string, repo: string, message: string, currentTreeSha: string, currentCommitSha: string) =>
   (await octo.rest.git.createCommit({
-    owner: org,
-    repo,
-    message,
-    tree: currentTreeSha,
-    parents: [currentCommitSha],
+      owner: org,
+      repo,
+      message,
+      tree: currentTreeSha,
+      parents: [currentCommitSha],
   })).data
 
 const setBranchToCommit = (octo: any, org: string, repo: string, branch: string, commitSha: string) =>
   octo.rest.git.updateRef({
-    owner: org,
-    repo,
-    ref: `heads/${branch}`,
-    sha: commitSha,
+      owner: org,
+      repo,
+      ref: `heads/${branch}`,
+      sha: commitSha,
   })
 
 run();

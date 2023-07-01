@@ -10,10 +10,6 @@ inputs:
   githubToken:
     description: "Github token. https://docs.github.com/en/actions/reference/authentication-in-a-workflow#about-the-github_token-secret"
     required: true
-  metricsRepo:
-    description: "Repository name where metrics will be stored"
-    required: true
-  
 runs:
   using: 'node16'
   main: 'dist/index.js'
