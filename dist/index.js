@@ -24175,13 +24175,16 @@ async function run() {
             pageSize: 500,
         });
         console.log("metrics: ", metrics);
-        const releases = await octokit.rest.repos.getLatestRelease({
+        const releases = octokit.rest.repos.listReleases({
             owner: repo.owner,
             repo: repo.repo,
         });
-        console.log("latestRelease: ", releases);
-        // { data: latestRelease }
-        const latestRelease = releases.data;
+        console.log("releases: ", releases);
+        const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
+            owner: repo.owner,
+            repo: repo.repo,
+        });
+        console.log("latestRelease: ", latestRelease);
         let tagName = latestRelease.tag_name;
         let newTagName = null;
         let branchName = github.context.ref.split('/').slice(-1)[0];

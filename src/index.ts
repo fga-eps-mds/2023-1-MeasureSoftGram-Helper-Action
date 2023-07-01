@@ -26,15 +26,19 @@ export async function run() {
 
     console.log("metrics: ", metrics);
 
-    const releases = await octokit.rest.repos.getLatestRelease({
+    const releases = octokit.rest.repos.listReleases({
       owner: repo.owner,
       repo: repo.repo,
     });
 
-    console.log("latestRelease: ", releases);
+    console.log("releases: ", releases);
 
-    // { data: latestRelease }
-    const latestRelease = releases.data;
+    const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
+      owner: repo.owner,
+      repo: repo.repo,
+    });
+
+    console.log("latestRelease: ", latestRelease);
 
     let tagName = latestRelease.tag_name;
     let newTagName = null;
