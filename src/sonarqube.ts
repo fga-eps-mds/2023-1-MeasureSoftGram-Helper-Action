@@ -78,6 +78,7 @@ export default class Sonarqube {
       const response = await this.http.get<MeasuresResponseAPI>(
         `/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`
       )
+      console.log("here2")
 
       if (response.status !== 200 || !response.data) {
         throw new Error(

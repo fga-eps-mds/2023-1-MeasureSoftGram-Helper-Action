@@ -24342,6 +24342,7 @@ class Sonarqube {
     getMeasures = async ({ pageSize }) => {
         try {
             const response = await this.http.get(`/api/measures/component_tree?component=${this.project.sonarProjectKey}&metricKeys=${this.sonarMetrics.join(',')}&ps=${pageSize}`);
+            console.log("here2");
             if (response.status !== 200 || !response.data) {
                 throw new Error('Error getting project measures from SonarQube. Please make sure you provided the host and token inputs.');
             }
