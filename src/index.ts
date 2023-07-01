@@ -68,16 +68,15 @@ export async function run() {
     const file_release_name = newTagName ? newTagName : branchName;
     const file_path = generateFilePath(currentDate, repo.repo, file_release_name);
 
-    createFolder(__dirname + '/pipeline/analytics-raw-data');
     console.log(`Writing file to ${file_path}`);
 
-    fs.writeFile(__dirname + file_path, JSON.stringify(metrics), (err) => {
+    fs.writeFile(file_path, JSON.stringify(metrics), (err) => {
       if (err) throw err;
       console.log('Data written to file.');
     });
 
-    const metricsRepo = core.getInput('metricsRepo')
-    uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
+    // const metricsRepo = core.getInput('metricsRepo')
+    // uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
   } catch (error: unknown) {
     if (error instanceof Error) {
       core.setFailed(error.message);

@@ -24210,15 +24210,14 @@ async function run() {
         }
         const file_release_name = newTagName ? newTagName : branchName;
         const file_path = (0, utils_1.generateFilePath)(currentDate, repo.repo, file_release_name);
-        (0, utils_1.createFolder)(__dirname + '/pipeline/analytics-raw-data');
         console.log(`Writing file to ${file_path}`);
-        fs_1.default.writeFile(__dirname + file_path, JSON.stringify(metrics), (err) => {
+        fs_1.default.writeFile(file_path, JSON.stringify(metrics), (err) => {
             if (err)
                 throw err;
             console.log('Data written to file.');
         });
-        const metricsRepo = core.getInput('metricsRepo');
-        uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
+        // const metricsRepo = core.getInput('metricsRepo')
+        // uploadToRepo(octokit, './pipeline', repo.owner, metricsRepo, 'main');
     }
     catch (error) {
         if (error instanceof Error) {
@@ -24422,7 +24421,7 @@ function createFolder(folderPath) {
 exports.createFolder = createFolder;
 function generateFilePath(currentDate, repo, file_release_name) {
     const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear().toString().padStart(4, '0')}-${currentDate.getHours().toString().padStart(2, '0')}-${currentDate.getMinutes().toString().padStart(2, '0')}`;
-    const file_path = `/pipeline/analytics-raw-data/fga-eps-mds-${repo}-${formattedDate}-${file_release_name}.json`;
+    const file_path = `./analytics-raw-data/fga-eps-mds-${repo}-${formattedDate}-${file_release_name}.json`;
     return file_path;
 }
 exports.generateFilePath = generateFilePath;
