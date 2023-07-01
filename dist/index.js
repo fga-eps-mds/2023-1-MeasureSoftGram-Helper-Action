@@ -24175,11 +24175,13 @@ async function run() {
             pageSize: 500,
         });
         console.log("metrics: ", metrics);
-        const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
+        const releases = await octokit.rest.repos.getLatestRelease({
             owner: repo.owner,
             repo: repo.repo,
         });
-        console.log("latestRelease: ", latestRelease);
+        console.log("latestRelease: ", releases);
+        // { data: latestRelease }
+        const latestRelease = releases.data;
         let tagName = latestRelease.tag_name;
         let newTagName = null;
         let branchName = github.context.ref.split('/').slice(-1)[0];
