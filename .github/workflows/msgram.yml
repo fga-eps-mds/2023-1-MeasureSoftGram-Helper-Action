@@ -21,5 +21,5 @@ jobs:
         uses: ./ # Uses an action in the root directory
         id: msgram
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          githubToken: ${{ secrets.API_TOKEN_DOC }}
           metricsRepo: "2023-1-MeasureSoftGram-doc"
