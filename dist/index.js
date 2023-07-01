@@ -24171,6 +24171,7 @@ async function run() {
         const sonarqube = new sonarqube_1.default(info);
         const currentDate = new Date();
         const octokit = github.getOctokit(core.getInput('githubToken', { required: true }));
+        console.log("here");
         const metrics = await sonarqube.getMeasures({
             pageSize: 500,
         });
