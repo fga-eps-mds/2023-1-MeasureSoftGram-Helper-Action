@@ -24,32 +24,28 @@ export async function run() {
       pageSize: 500,
     });
 
-    console.log("metrics: ", metrics);
-
     const releases = await octokit.rest.repos.listReleases({
       owner: repo.owner,
       repo: repo.repo,
     });
 
-    console.log("releases: ", releases);
-
+    let latestReleaseTagName = "v0.0.0";
     if (releases.data.length === 0) {
       console.log("There are no releases yet.")
+    } else {
+      const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
+        owner: repo.owner,
+        repo: repo.repo,
+      });
+
+      latestReleaseTagName = latestRelease.tag_name;
     }
 
-    const { data: latestRelease } = await octokit.rest.repos.getLatestRelease({
-      owner: repo.owner,
-      repo: repo.repo,
-    });
-
-    console.log("latestRelease: ", latestRelease);
-
-    let tagName = latestRelease.tag_name;
     let newTagName = null;
     let branchName = github.context.ref.split('/').slice(-1)[0];
 
     console.log("branchName: ", branchName);
-    console.log("tagName: ", tagName);
+    console.log("latestReleaseTagName: ", latestReleaseTagName);
 
     if (github.context.payload.pull_request) {
       if (!github.context.payload.pull_request.merged) return;
@@ -59,7 +55,7 @@ export async function run() {
 
       if (shouldCreateRelease(labels)) {
         console.log("Creating release.")
-        newTagName = getNewTagName(labels, latestRelease.tag_name);
+        newTagName = getNewTagName(labels, latestReleaseTagName);
 
         await octokit.rest.repos.createRelease({
           ...github.context.repo,
