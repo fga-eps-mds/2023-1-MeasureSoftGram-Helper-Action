@@ -24216,7 +24216,7 @@ async function run() {
             console.log('Data written to file.');
         });
         const metricsRepo = core.getInput('metricsRepo');
-        uploadToRepo(octokit, './analytics', repo.owner, repo.repo, 'main');
+        uploadToRepo(octokit, './analytics', repo.owner, metricsRepo, 'main');
     }
     catch (error) {
         if (error instanceof Error) {
@@ -24230,15 +24230,10 @@ async function run() {
 exports.run = run;
 const uploadToRepo = async (octo, coursePath, org, repo, branch) => {
     console.log('uploadToRepo', coursePath, org, repo, branch);
-    // gets commit's AND its tree's SHA
     const currentCommit = await getCurrentCommit(octo, org, repo, branch);
-    console.log('currentCommit', currentCommit);
     const filesPaths = await glob(coursePath);
-    console.log('filesPaths', filesPaths);
     const filesBlobs = await Promise.all(filesPaths.map(createBlobForFile(octo, org, repo)));
-    console.log('filesBlobs', filesBlobs);
     const pathsForBlobs = filesPaths.map((fullPath) => path.relative(coursePath, fullPath));
-    console.log('pathsForBlobs', pathsForBlobs);
     const newTree = await createNewTree(octo, org, repo, filesBlobs, pathsForBlobs, currentCommit.treeSha);
     console.log('newTree', newTree);
     const newCommit = await createNewCommit(octo, org, repo, COMMIT_MESSAGE, newTree.sha, currentCommit.commitSha);
@@ -24342,7 +24337,6 @@ class Sonarqube {
         this.token = info.token;
         this.project = info.project;
         const tokenb64 = Buffer.from(`${this.token}:`).toString('base64');
-        this.project.sonarProjectKey = "fga-eps-mds_2023-1-MeasureSoftGram-Front";
         console.log(`SonarQube host: ${this.host}`);
         console.log(`SonarQube project: ${this.project.sonarProjectKey}`);
         this.http = axios_1.default.create({

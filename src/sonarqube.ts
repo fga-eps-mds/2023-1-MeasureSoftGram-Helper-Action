@@ -55,7 +55,6 @@ export default class Sonarqube {
     this.token = info.token
     this.project = info.project
     const tokenb64 = Buffer.from(`${this.token}:`).toString('base64')
-    this.project.sonarProjectKey = "fga-eps-mds_2023-1-MeasureSoftGram-Front"
 
     console.log(`SonarQube host: ${this.host}`)
     console.log(`SonarQube project: ${this.project.sonarProjectKey}`)
