@@ -68,10 +68,10 @@ export async function run() {
     const file_release_name = newTagName ? newTagName : branchName;
     const file_path = generateFilePath(currentDate, repo.repo, file_release_name);
 
-    createFolder('./pipeline/analytics-raw-data');
+    createFolder(__dirname + './pipeline/analytics-raw-data');
     console.log(`Writing file to ${file_path}`);
 
-    fs.writeFile(path.join(__dirname, file_path), JSON.stringify(metrics), (err) => {
+    fs.writeFile(__dirname + file_path, JSON.stringify(metrics), (err) => {
       if (err) throw err;
       console.log('Data written to file.');
     });
