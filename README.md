@@ -13,10 +13,6 @@ on:
   pull_request:
     branches: [main, develop]
     types: [closed]
-  push:
-    branches: [main, develop]
-    tags:
-      - "v*"
 
 jobs:
   release:
@@ -34,7 +30,7 @@ jobs:
           metricsRepo: "2023-1-MeasureSoftGram-doc"
 ```
 
-Neste caso, a coleta de métricas será executada sempre que pull request for fechado e mergado com a branch main ou develop. Além disso, a coleta também será executada sempre que uma tag for criada manualmente na branch main ou develop. E quando houver um push na branch main ou develop, a coleta também será executada.
+Neste caso, a coleta de métricas será executada sempre que pull request for fechado e mergado com a branch main ou develop.
 
 ### Uso da geração de releases
 
