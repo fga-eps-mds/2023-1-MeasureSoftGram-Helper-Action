@@ -1,6 +1,6 @@
 import * as core from '@actions/core';
 
-import { generateFilePath, getInfo, getNewTagName, Info, shouldCreateRelease } from '../src/utils';
+import { generateFileName, getInfo, getNewTagName, Info, shouldCreateRelease } from '../src/utils';
 
 jest.mock('@actions/core');
 
@@ -52,14 +52,14 @@ describe('getInfo', () => {
   });
 });
 
-describe('generateFilePath', () => {
+describe('generateFileName', () => {
   test('should generate file path correctly', () => {
     const currentDate = new Date('2023-06-28T10:30:00');
     const repo = 'my-repo';
     const file_release_name = 'release-1.0.0';
 
-    const expectedFilePath = './analytics-raw-data/fga-eps-mds-my-repo-28-06-2023-10-30-release-1.0.0.json';
-    const generatedFilePath = generateFilePath(currentDate, repo, file_release_name);
+    const expectedFilePath = 'fga-eps-mds-my-repo-6-28-2023-10-30-0-release-1.0.0.json';
+    const generatedFilePath = generateFileName(currentDate, repo, file_release_name);
 
     expect(generatedFilePath).toBe(expectedFilePath);
   });
