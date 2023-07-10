@@ -21608,7 +21608,13 @@ function createFolder(folderPath) {
 }
 exports.createFolder = createFolder;
 function generateFileName(currentDate, repo, file_release_name) {
-    const formattedDate = `${currentDate.getDate().toString().padStart(2, '0')}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${currentDate.getFullYear().toString().padStart(4, '0')}-${currentDate.getHours().toString().padStart(2, '0')}-${currentDate.getMinutes().toString().padStart(2, '0')}`;
+    var seconds = currentDate.getSeconds();
+    var minutes = currentDate.getMinutes();
+    var hour = currentDate.getHours();
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var day = currentDate.getDate();
+    const formattedDate = `${month}-${day}-${year}-${hour}-${minutes}-${seconds}`;
     const file_path = `fga-eps-mds-${repo}-${formattedDate}-${file_release_name}.json`;
     return file_path;
 }
